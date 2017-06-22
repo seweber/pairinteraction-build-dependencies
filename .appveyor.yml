@@ -1,0 +1,38 @@
+os: Visual Studio 2015
+
+platform: x64
+
+configuration: Release
+    
+install:
+  - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
+  
+  - cmd: cd C:\ && git clone https://github.com/Microsoft/vcpkg.git && cd vcpkg && git checkout df3f73d8256e549ad43efd0a84cd3691d91c9c10 && bootstrap-vcpkg.bat && cd %APPVEYOR_BUILD_FOLDER%
+  
+build_script:
+  #- cmd: C:\vcpkg\vcpkg install sqlite3:x64-windows eigen3:x64-windows boost:x64-windows gsl:x64-windows
+  - cmd: C:\vcpkg\vcpkg install eigen3:x64-windows
+
+after_build:
+  #- cmd: C:\vcpkg\vcpkg export sqlite3:x64-windows eigen3:x64-windows boost:x64-windows gsl:x64-windows --zip
+  - cmd: C:\vcpkg\vcpkg export eigen3:x64-windows --zip
+  - cmd: move C:\vcpkg\vcpkg-export*.zip vcpkg-export.zip
+
+artifacts:
+  - path: vcpkg-export.zip
+    name: dependencies
+
+# TODO choco-export.zip
+
+# TODO conda-export.zip
+
+deploy:
+  - provider: GitHub
+    release: $(APPVEYOR_REPO_COMMIT)
+    auth_token: $(GH_TOKEN)
+    artifact:  dependencies
+    prerelease: false
+    force_update: true
+    on:
+      branch: master
