@@ -17,14 +17,13 @@ build_script:
 
 after_build:
   - cmd: C:\vcpkg\vcpkg export sqlite3:x64-windows eigen3:x64-windows boost:x64-windows gsl:x64-windows --zip
-  - cmd: move C:\vcpkg\vcpkg-export-*.zip vcpkg-export.zip
+  - cmd: move C:\vcpkg\vcpkg-export-*.zip cpp-libraries-windows-x86_64.zip
   
 artifacts:
-  - path: vcpkg-export.zip
+  - path: cpp-libraries-windows-x86_64.zip
     name: dependencies
 
-# TODO choco-export.zip
-# TODO conda-export.zip
+# TODO python-packages-windows_x86_64.zip
 
 deploy:
   - provider: GitHub
