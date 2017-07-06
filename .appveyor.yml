@@ -7,15 +7,13 @@ configuration: Release
 skip_tags: true
 
 environment:
-    PYTHON_VERSION: 3.6
-    PYTHON_ROOT: C:\Python36-x64
-    MINICONDA: C:\Miniconda36-x64
+    MINICONDA_ROOT: C:\Miniconda36-x64
 
 install:
   - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
   
-  - cmd: call C:\Miniconda36-x64\Scripts\activate.bat
+  - cmd: call %MINICONDA_ROOT%\Scripts\activate.bat
   - cmd: conda config --append channels conda-forge
   - cmd: conda install -y -q conda-build
   - cmd: conda clean -y -a
@@ -31,7 +29,7 @@ build_script:
 after_build:
   - cmd: md conda-export\noarch
   - cmd: md conda-export\win-64
-  - cmd: move C:\Miniconda36-x64\pkgs\*.tar.bz2 conda-export\win-64
+  - cmd: move %MINICONDA_ROOT%\pkgs\*.tar.bz2 conda-export\win-64
   - cmd: conda index conda-export\noarch
   - cmd: conda index conda-export\win-64
   - cmd: 7z a -tzip python-packages-windows_x86_64.zip conda-export > nul
