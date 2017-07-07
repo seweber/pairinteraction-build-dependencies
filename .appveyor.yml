@@ -10,10 +10,10 @@ environment:
     MINICONDA_ROOT: C:\Miniconda36-x64
 
 install:
+  - ps: $env:COMMIT_TIMESTAMP = git log -1 --pretty=format:%ct
+
   - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
-  
-  - cmd: git log -1 --pretty=format:%ct
   
   - cmd: call %MINICONDA_ROOT%\Scripts\activate.bat
   - cmd: conda config --append channels conda-forge
@@ -48,7 +48,7 @@ artifacts:
 
 deploy:
   - provider: GitHub
-    release: v$(APPVEYOR_BUILD_NUMBER)
+    release: v$(COMMIT_TIMESTAMP)
     auth_token: $(GH_TOKEN)
     artifact: cpp-libraries-windows-x86_64, python-packages-windows_x86_64
     force_update: true
