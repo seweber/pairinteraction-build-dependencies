@@ -13,7 +13,7 @@ install:
   - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
   
-  - cmd: git log -1 --format=%ct
+  - cmd: git log -1 --format=%cd --date=local
   
   - cmd: call %MINICONDA_ROOT%\Scripts\activate.bat
   - cmd: conda config --append channels conda-forge
